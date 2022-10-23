@@ -48,15 +48,18 @@ if __name__ == '__main__':
         inputs = np.transpose(img, (2, 0, 1))
         inputs = inputs[np.newaxis, ...]
 
-        tensor = torch.FloatTensor(inputs).cuda()
-        jpeg = DiffJPEG(512, 512, differentiable=True).cuda()
+        tensor = torch.FloatTensor(inputs)
+        jpeg = DiffJPEG(512, 512, differentiable=True)
 
         quality = 80
         jpeg.set_quality(quality)
 
         outputs = jpeg(tensor)
-        outputs = outputs.detach().cpu().numpy()
+        outputs = outputs.detach().numpy()
         outputs = np.transpose(outputs[0], (1, 2, 0))
+
+        R, G, B = img[..., 0], img[..., 1], img[..., 2]
+        img[..., 0], img[..., 1], img[..., 2] = B, G, R
 
         cv2.imshow("QF:"+str(quality), outputs / 255.)
         cv2.waitKey()
