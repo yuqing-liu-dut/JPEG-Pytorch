@@ -42,8 +42,7 @@ if __name__ == '__main__':
         import numpy as np
 
         img = cv2.imread("Lena.png")
-        B, G, R = img[..., 0], img[..., 1], img[..., 2]
-        img[..., 0], img[..., 1], img[..., 2] = R, G, B
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
         inputs = np.transpose(img, (2, 0, 1))
         inputs = inputs[np.newaxis, ...]
@@ -58,11 +57,11 @@ if __name__ == '__main__':
         outputs = outputs.detach().numpy()
         outputs = np.transpose(outputs[0], (1, 2, 0))
 
-        R, G, B = img[..., 0], img[..., 1], img[..., 2]
-        img[..., 0], img[..., 1], img[..., 2] = B, G, R
+        outputs = cv2.cvtColor(outputs, cv2.COLOR_RGB2BGR)
 
         cv2.imshow("QF:"+str(quality), outputs / 255.)
         cv2.waitKey()
 
         from skimage.metrics import peak_signal_noise_ratio as PSNR
+        img = cv2.imread("Lena.png")
         print(PSNR(np.uint8(outputs), np.uint8(img)))
