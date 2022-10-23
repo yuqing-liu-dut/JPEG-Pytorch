@@ -42,6 +42,8 @@ if __name__ == '__main__':
         import numpy as np
 
         img = cv2.imread("Lena.png")
+        B, G, R = img[..., 0], img[..., 1], img[..., 2]
+        img[..., 0], img[..., 1], img[..., 2] = R, G, B
 
         inputs = np.transpose(img, (2, 0, 1))
         inputs = inputs[np.newaxis, ...]
